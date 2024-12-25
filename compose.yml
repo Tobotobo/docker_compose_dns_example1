@@ -1,0 +1,25 @@
+services:
+  dns:
+    build:
+      context: ./docker/dns
+      dockerfile: Dockerfile
+    tty: true
+    networks:
+      my-custom-network:
+        ipv4_address: 192.168.1.100 # 固定 IP を設定
+
+  ubuntu:
+    image: ubuntu:22.04
+    networks:
+      my-custom-network:
+        ipv4_address: 192.168.1.101 # 必要に応じて固定 IP を設定
+    dns:
+      - 192.168.1.100 # DNS サーバーの IP を指定
+    tty: true
+
+networks:
+  my-custom-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
